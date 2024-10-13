@@ -1,13 +1,17 @@
 import React from 'react';
+import { useSelector } from 'react-redux';
 
 const NavBar = () => {
+  const user=useSelector((store)=>store.user);
+  //console.log(user);
   return (
     <div className="navbar bg-[#d5883f] text-white">
       <div className="flex-1">
         <a className="btn hover:bg-[#D2B48C] hover:text-[#4B3621] transition duration-300 ease-in-out text-xl">🧑‍💻 devTinder</a>
       </div>
-
-      <div className="flex-none gap-2">
+     
+      {user && (<div className="flex-none gap-2">
+        <div className="form-control text-amber-950 font-extrabold">Welcome, {user?.firstName}</div>
         <div className="dropdown dropdown-end mx-5">
           <div tabIndex={0} role="button" className="btn btn-ghost btn-circle avatar">
             <div className="w-10 h-10 rounded-full border-4 border-[#6F4E37] overflow-hidden"> {/* Coffee-colored border */}
@@ -31,7 +35,7 @@ const NavBar = () => {
             <li><a>Logout</a></li>
           </ul>
         </div>
-      </div>
+      </div>)}
     </div>
   );
 }
