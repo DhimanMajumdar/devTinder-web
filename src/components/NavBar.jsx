@@ -22,7 +22,7 @@ const NavBar = () => {
       // error logic maybe to error page
     }
   }
-  console.log(user);
+  //console.log(user);
   return (
     <div className="navbar bg-[#d5883f] text-white">
       <div className="flex-1">
