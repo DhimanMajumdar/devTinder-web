@@ -30,7 +30,7 @@ function Connections() {
 
   
   if(!connections) return;
-  if(connections.length===0) return <h1>No Connections Found!!</h1>
+  if(connections.length===0) return <h1 className="text-3xl  text-center font-extrabold mt-4">No Connections Found!!</h1>
  
   return (
     <div className="my-10">

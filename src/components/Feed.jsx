@@ -8,8 +8,9 @@ import UserCard from "./UserCard";
 const Feed = () => {
   const feed = useSelector((store) => store.feed);
   const dispatch = useDispatch();
+
   const getFeed = async () => {
-    if (feed) return;
+    if (feed && feed.length > 0) return;
 
     try {
       const res = await axios.get(BASE_URL + "/feed", {
@@ -17,16 +18,23 @@ const Feed = () => {
       });
       dispatch(addFeed(res.data));
     } catch (err) {
-      //error msg
+      // handle error
+      console.error("Failed to fetch feed", err);
     }
   };
+
   useEffect(() => {
     getFeed();
   }, []);
+
   return (
-    feed && (<div className="flex justify-center my-10">
-      <UserCard user={feed[0]} />
-    </div>)
+    <div className="flex justify-center my-10">
+      {feed && feed.length > 0 ? (
+        <UserCard user={feed[0]} />
+      ) : (
+        <p className="text-3xl  text-center font-extrabold mt-4">No feed available at the moment. Please try again later.</p>
+      )}
+    </div>
   );
 };
 
