@@ -39,7 +39,7 @@ function Requests() {
       } catch (error) {
         console.error("Error fetching requests:", error);
         // Optional: navigate to error page or show error message
-        navigate("/error");
+        
       }
     };
 
