@@ -4,9 +4,10 @@ import { useDispatch } from "react-redux";
 import { addUser } from "../utils/userSlice";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../utils/constants";
+import { toast } from "react-hot-toast";
 
 const Login = () => {
-  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [isLogin, setIsLogin] = useState(true);
   const [emailId, setEmailId] = useState("");
   const [password, setPassword] = useState("");
   const [firstName, setFirstName] = useState("");
@@ -18,32 +19,60 @@ const Login = () => {
 
   // Function to handle SignUp
   const handleSignUp = async () => {
-    // Simple validation to check if all fields are filled
     if (!firstName || !lastName || !emailId || !password || !gender) {
-      setError("All fields are required");
+      const errMsg = "All fields are required!";
+      setError(errMsg);
+      toast.error(errMsg);
       return;
     }
-
+  
+    const signupPromise = axios.post(
+      `${BASE_URL}/signup`,
+      { firstName, lastName, emailId, password, gender },
+      { withCredentials: true }
+    );
+  
+    toast.promise(signupPromise, {
+      loading: "Signing up... ⏳",
+      success: "Signup successful! Redirecting to login... 🔄",
+      error: "Signup failed. Please try again.",
+    });
+  
     try {
-      const res = await axios.post(
-        `${BASE_URL}/signup`,
-        { firstName, lastName, emailId, password, gender },
-        { withCredentials: true }
-      );
-
-      if (res.status === 200) {
-        dispatch(addUser(res.data.data)); // Dispatch user data to Redux store
-        navigate("/profile"); // Navigate to the profile page after successful signup
+      const res = await signupPromise;
+  
+      if (res.status === 201) {
+        console.log("✅ Signup successful, switching to login...");
+        toast.success("Signup successful! Redirecting to login... 🔄", { duration: 4000 });
+  
+        // ✅ Clear form fields
+        setFirstName("");
+        setLastName("");
+        setEmailId("");
+        setPassword("");
+        setGender("");
+        setError("");
+  
+        // ✅ Switch to Login mode
+        setTimeout(() => {
+          setIsLogin(true);
+          console.log("✅ Switched to Login mode!");
+        }, 500);
       }
     } catch (err) {
-      // to do
+      const errorMessage = err.response?.data || "Signup failed. Please try again.";
+      setError(errorMessage);
+      toast.error(errorMessage);
+      console.error("❌ Signup error:", err);
     }
   };
-
+  
   // Function to handle Login
   const handleLogin = async () => {
     if (!emailId || !password) {
-      setError("Please enter both email and password.");
+      const errMsg = "Please enter both email and password.";
+      setError(errMsg);
+      toast.error(errMsg); // ✅ Show toast on missing credentials
       return;
     }
 
@@ -55,14 +84,18 @@ const Login = () => {
       );
 
       if (res.status === 200) {
-        dispatch(addUser(res.data)); // Dispatch user data to Redux store
-        navigate("/"); // Navigate to home page after successful login
+        dispatch(addUser(res.data));
+        toast.success("Login successful! Welcome back 🚀"); // ✅ Show success toast
+        navigate("/");
       } else {
         setError("Login failed. Please try again.");
+        toast.error("Login failed. Please try again."); // ✅ Show error toast
       }
     } catch (err) {
-      setError(err?.response?.data?.message || "Login failed. Please check your credentials and try again.");
-      console.log(err); // Log error for debugging
+      const errorMessage = err?.response?.data?.message || "Login failed. Please check your credentials and try again.";
+      setError(errorMessage);
+      toast.error(errorMessage); // ✅ Show error toast
+      console.log(err);
     }
   };
 
@@ -138,7 +171,7 @@ const Login = () => {
           <p
             className="underline cursor-pointer text-center"
             onClick={() => {
-              setError(""); // Reset error message when toggling
+              setError("");
               setIsLogin(!isLogin);
             }}
           >

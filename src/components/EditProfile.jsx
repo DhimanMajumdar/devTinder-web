@@ -121,8 +121,9 @@ const EditProfile = ({ user }) => {
           </div>
         </div>
         <UserCard
-          user={{ firstName, lastName, photoUrl, age, gender, about }}
-        />
+  user={{ firstName, lastName, photoUrl, age, gender, about }}
+  showActions={false} // Hide buttons in EditProfile
+/>
       </div>
       {showToast && (
         <div className="toast toast-top toast-center">
