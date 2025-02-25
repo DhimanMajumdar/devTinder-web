@@ -24,7 +24,7 @@ function UsersCard({ user, showActions = true }) {
   };
 
   return (
-    <div className="card h-[500px] bg-base-300 w-96 shadow-xl">
+    <div className="card h-[500px] bg-base-300 w-96 shadow-xl mt-4">
       <figure>
         <img src={photoUrl} className="h-[280px] w-full" alt="Profile" />
       </figure>

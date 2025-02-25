@@ -2,7 +2,7 @@ import React from 'react';
 
 const Footer = () => {
   return (
-    <footer className="footer bg-[#d5883f] font-bold text-primary-content fixed bottom-0 p-2 h-20">
+    <footer className="footer bg-[#d5883f] font-bold text-primary-content fixed bottom-0 p-2 h-18">
       <aside className="flex items-center space-x-2">
         <svg
           width="40" // Reduced size

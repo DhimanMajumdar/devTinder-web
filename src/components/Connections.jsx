@@ -33,7 +33,7 @@ function Connections() {
   if(connections.length===0) return <h1 className="text-3xl  text-center font-extrabold mt-4">No Connections Found!!</h1>
  
   return (
-    <div className="my-10">
+    <div className="my-16 mt-2">
       <h1 className="text-3xl  text-center font-extrabold">Connections</h1>
       <div>
         {connections.map((user) => (

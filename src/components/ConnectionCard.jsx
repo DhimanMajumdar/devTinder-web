@@ -1,8 +1,10 @@
+import { Link } from "react-router-dom";
+
 function ConnectionCard({ user }) {
-    const { firstName, lastName, photoUrl, gender, age, about } = user;
+    const {_id, firstName, lastName, photoUrl, gender, age, about } = user;
     
     return (
-      <div className="flex bg-base-300 rounded-xl shadow-xl mx-auto w-3/4 md:1/2 my-5 items-center">
+      <div key={_id} className="flex bg-base-300 rounded-xl shadow-xl mx-auto w-3/4 md:1/2 my-5 items-center">
         <figure>
           <img
             src={photoUrl}
@@ -18,7 +20,9 @@ function ConnectionCard({ user }) {
             </h2>
           )}
           <p className="text-sm md:text-l">{about}</p>
+          
         </div>
+        <Link to={"/chat/"+_id}><button className="btn btn-primary mr-5 w-30">Chat</button></Link>
       </div>
     );
   }
