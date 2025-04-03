@@ -20,87 +20,57 @@ const Login = () => {
   // Function to handle SignUp
   const handleSignUp = async () => {
     if (!firstName || !lastName || !emailId || !password || !gender) {
-      const errMsg = "All fields are required!";
-      setError(errMsg);
-      toast.error(errMsg);
+      toast.error("All fields are required!");
       return;
     }
 
-    const signupPromise = axios.post(
-      `${BASE_URL}/signup`,
-      { firstName, lastName, emailId, password, gender },
-      { withCredentials: true }
-    );
-
-    toast.promise(signupPromise, {
-      loading: "Signing up... ⏳",
-      success: "Signup successful! Redirecting to login... 🔄",
-      error: "Signup failed. Please try again.",
-    });
-
     try {
-      const res = await signupPromise;
+      const { data } = await axios.post(
+        `${BASE_URL}/signup`,
+        { firstName, lastName, emailId, password, gender },
+        { withCredentials: true }
+      );
 
-      if (res.status === 201) {
-        console.log("✅ Signup successful, switching to login...");
-        toast.success("Signup successful! Redirecting to login... 🔄", {
-          duration: 4000,
-        });
+      toast.success("Signup successful! Redirecting to login... 🔄");
 
-        // ✅ Clear form fields
-        setFirstName("");
-        setLastName("");
-        setEmailId("");
-        setPassword("");
-        setGender("");
-        setError("");
+      // ✅ Reset form fields
+      setFirstName("");
+      setLastName("");
+      setEmailId("");
+      setPassword("");
+      setGender("");
+      setError("");
 
-        // ✅ Switch to Login mode
-        setTimeout(() => {
-          setIsLogin(true);
-          console.log("✅ Switched to Login mode!");
-        }, 500);
-      }
+      setTimeout(() => setIsLogin(true), 500);
     } catch (err) {
-      const errorMessage =
-        err.response?.data || "Signup failed. Please try again.";
+      const errorMessage = err.response?.data?.message || "Signup failed.";
       setError(errorMessage);
       toast.error(errorMessage);
-      console.error("❌ Signup error:", err);
     }
   };
 
   // Function to handle Login
   const handleLogin = async () => {
     if (!emailId || !password) {
-      const errMsg = "Please enter both email and password.";
-      setError(errMsg);
-      toast.error(errMsg); // ✅ Show toast on missing credentials
+      toast.error("Please enter both email and password.");
       return;
     }
 
     try {
-      const res = await axios.post(
+      const { data } = await axios.post(
         `${BASE_URL}/login`,
         { emailId, password },
         { withCredentials: true }
       );
 
-      if (res.status === 200) {
-        dispatch(addUser(res.data));
-        toast.success("Login successful! Welcome back 🚀"); // ✅ Show success toast
-        navigate("/");
-      } else {
-        setError("Login failed. Please try again.");
-        toast.error("Login failed. Please try again."); // ✅ Show error toast
-      }
+      dispatch(addUser(data));
+      toast.success("Login successful! 🚀");
+      navigate("/");
     } catch (err) {
       const errorMessage =
-        err?.response?.data?.message ||
-        "Login failed. Please check your credentials and try again.";
+        err.response?.data?.message || "Invalid credentials.";
       setError(errorMessage);
-      toast.error(errorMessage); // ✅ Show error toast
-      console.log(err);
+      toast.error(errorMessage);
     }
   };
 
