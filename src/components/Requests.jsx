@@ -23,7 +23,6 @@ function Requests() {
       }
     } catch (error) {
       console.error("Error reviewing request:", error);
-      // Handle errors (optional: show an error message)
     }
   };
 
@@ -33,17 +32,17 @@ function Requests() {
         const res = await axios.get(`${BASE_URL}/user/requests/received`, {
           withCredentials: true,
         });
-        if (res.status === 200) {
-          dispatch(addRequests(res?.data?.data)); // Add requests to Redux store
+
+        if (res.status === 200 && res?.data?.data) {
+          dispatch(addRequests(res.data.data)); // Add requests to Redux store
         }
       } catch (error) {
         console.error("Error fetching requests:", error);
-        // Optional: navigate to error page or show error message
       }
     };
 
     fetchRequests();
-  }, [dispatch, navigate]);
+  }, [dispatch]);
 
   // Return a message if requests are not loaded
   if (!requests) {
@@ -64,8 +63,14 @@ function Requests() {
       <h1 className="text-bold text-white text-3xl">Connection Requests</h1>
 
       {requests.map((request) => {
+        // ✅ Check if fromUserId is null or missing
+        if (!request.fromUserId) {
+          console.warn("⚠️ Missing fromUserId in request:", request);
+          return null; // Skip rendering this request
+        }
+
         const { _id, firstName, lastName, photoUrl, age, gender, about } =
-          request.fromUserId;
+          request.fromUserId || {}; // Fallback to empty object
 
         return (
           <div
@@ -74,7 +79,7 @@ function Requests() {
           >
             <div>
               <img
-                alt="photo"
+                alt="User"
                 className="md:w-36 md:h-28 md:rounded-full"
                 src={photoUrl || "default-photo-url.jpg"} // Fallback if photoUrl is missing
               />
