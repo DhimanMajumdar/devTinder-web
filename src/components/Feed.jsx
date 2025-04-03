@@ -32,7 +32,9 @@ const Feed = () => {
       {feed && feed.length > 0 ? (
         <UserCard user={feed[0]} />
       ) : (
-        <p className="text-3xl  text-center font-extrabold mt-4">No feed available at the moment. Please try again later.</p>
+        <p className="text-3xl  text-center font-extrabold mt-4">
+          No feed available at the moment. Please try again later.
+        </p>
       )}
     </div>
   );

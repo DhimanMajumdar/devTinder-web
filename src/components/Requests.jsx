@@ -39,7 +39,6 @@ function Requests() {
       } catch (error) {
         console.error("Error fetching requests:", error);
         // Optional: navigate to error page or show error message
-        
       }
     };
 
@@ -65,7 +64,8 @@ function Requests() {
       <h1 className="text-bold text-white text-3xl">Connection Requests</h1>
 
       {requests.map((request) => {
-        const { _id, firstName, lastName, photoUrl, age, gender, about } = request.fromUserId;
+        const { _id, firstName, lastName, photoUrl, age, gender, about } =
+          request.fromUserId;
 
         return (
           <div
