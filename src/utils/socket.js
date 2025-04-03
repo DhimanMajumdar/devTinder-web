@@ -1,13 +1,16 @@
 import { io } from "socket.io-client";
-import { BASE_URL } from "./constants"; // This should be your backend URL
+import { BASE_URL } from "./constants"; // ✅ Ensure BASE_URL is correct
 
 export const createSocketConnection = () => {
-  console.log("Initializing WebSocket...");
+  console.log("🔄 Connecting to WebSocket:", BASE_URL);
 
   const socket = io(BASE_URL, {
-    path: "/socket.io/", // ✅ Ensure correct path (remove `/api/socket.io/`)
+    path: "/socket.io/",
     transports: ["websocket", "polling"], // ✅ Ensure polling fallback
-    withCredentials: true, // ✅ Allow auth-based WebSocket connections
+    withCredentials: true,
+    reconnection: true,
+    reconnectionAttempts: 5,
+    reconnectionDelay: 3000,
   });
 
   socket.on("connect", () => {
