@@ -25,26 +25,28 @@ const Login = () => {
       toast.error(errMsg);
       return;
     }
-  
+
     const signupPromise = axios.post(
       `${BASE_URL}/signup`,
       { firstName, lastName, emailId, password, gender },
       { withCredentials: true }
     );
-  
+
     toast.promise(signupPromise, {
       loading: "Signing up... ⏳",
       success: "Signup successful! Redirecting to login... 🔄",
       error: "Signup failed. Please try again.",
     });
-  
+
     try {
       const res = await signupPromise;
-  
+
       if (res.status === 201) {
         console.log("✅ Signup successful, switching to login...");
-        toast.success("Signup successful! Redirecting to login... 🔄", { duration: 4000 });
-  
+        toast.success("Signup successful! Redirecting to login... 🔄", {
+          duration: 4000,
+        });
+
         // ✅ Clear form fields
         setFirstName("");
         setLastName("");
@@ -52,7 +54,7 @@ const Login = () => {
         setPassword("");
         setGender("");
         setError("");
-  
+
         // ✅ Switch to Login mode
         setTimeout(() => {
           setIsLogin(true);
@@ -60,13 +62,14 @@ const Login = () => {
         }, 500);
       }
     } catch (err) {
-      const errorMessage = err.response?.data || "Signup failed. Please try again.";
+      const errorMessage =
+        err.response?.data || "Signup failed. Please try again.";
       setError(errorMessage);
       toast.error(errorMessage);
       console.error("❌ Signup error:", err);
     }
   };
-  
+
   // Function to handle Login
   const handleLogin = async () => {
     if (!emailId || !password) {
@@ -92,7 +95,9 @@ const Login = () => {
         toast.error("Login failed. Please try again."); // ✅ Show error toast
       }
     } catch (err) {
-      const errorMessage = err?.response?.data?.message || "Login failed. Please check your credentials and try again.";
+      const errorMessage =
+        err?.response?.data?.message ||
+        "Login failed. Please check your credentials and try again.";
       setError(errorMessage);
       toast.error(errorMessage); // ✅ Show error toast
       console.log(err);
@@ -101,9 +106,14 @@ const Login = () => {
 
   return (
     <div className="flex justify-center -my-3">
-      <div className="card bg-base-300 w-96 shadow-xl" style={{ transform: "scale(0.9)" }}>
+      <div
+        className="card bg-base-300 w-96 shadow-xl"
+        style={{ transform: "scale(0.9)" }}
+      >
         <div className="card-body">
-          <h2 className="card-title justify-center">{isLogin ? "Login" : "Sign Up"}</h2>
+          <h2 className="card-title justify-center">
+            {isLogin ? "Login" : "Sign Up"}
+          </h2>
 
           {!isLogin && (
             <>
